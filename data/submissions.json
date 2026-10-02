@@ -1,0 +1,24 @@
+[
+  {
+    "id": "sub_1790938386775",
+    "teamId": "team01",
+    "teamName": "Nebula Knights 01",
+    "questionId": 1,
+    "questionTitle": "Two Sum Target Pair",
+    "language": "python",
+    "code": "import sys\n\ndef solve():\n    lines = sys.stdin.read().split()\n    if not lines:\n        return\n    n = int(lines[0])\n    target = int(lines[1])\n    nums = [int(x) for x in lines[2:2+n]]\n    \n    lookup = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in lookup:\n            print(f\"{lookup[complement]} {i}\")\n            return\n        lookup[num] = i\n\nif __name__ == '__main__':\n    solve()\n",
+    "isCorrect": true,
+    "timestamp": "2026-10-02T10:53:06.775Z"
+  },
+  {
+    "id": "sub_1790937887393",
+    "teamId": "team01",
+    "teamName": "Nebula Knights 01",
+    "questionId": 1,
+    "questionTitle": "Two Sum Target Pair",
+    "language": "python",
+    "code": "import sys\n\ndef solve():\n    lines = sys.stdin.read().split()\n    if not lines:\n        return\n    n = int(lines[0])\n    target = int(lines[1])\n    nums = [int(x) for x in lines[2:2+n]]\n    \n    lookup = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in lookup:\n            print(f\"{lookup[complement]} {i}\")\n            return\n        lookup[num] = i\n\nif __name__ == '__main__':\n    solve()\n",
+    "isCorrect": false,
+    "timestamp": "2026-10-02T10:44:47.393Z"
+  }
+]

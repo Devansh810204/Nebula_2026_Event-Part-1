@@ -1,0 +1,822 @@
+[
+  {
+    "id": 1,
+    "title": "Two Sum Target Pair",
+    "category": "Arrays & Hashing",
+    "type": "coding",
+    "difficulty": "Easy",
+    "timeLimit": 600,
+    "unlockedLetter": "N",
+    "description": "Given an array of integers `nums` and an integer `target`, find the two indices (0-indexed) of the numbers such that they add up to `target`.\n\nAssume that each input will have exactly one solution, and you may not use the same element twice. Print the two indices separated by a space in ascending order.",
+    "inputFormat": "First line contains integer `N` (number of elements) and integer `target`.\nSecond line contains `N` space-separated integers representing `nums`.",
+    "outputFormat": "Print the two 0-indexed positions separated by a space (e.g. \"0 1\").",
+    "constraints": "2 <= N <= 10^4\n-10^9 <= nums[i] <= 10^9\n-10^9 <= target <= 10^9",
+    "sampleTestCases": [
+      {
+        "input": "4 9\n2 7 11 15",
+        "output": "0 1",
+        "explanation": "nums[0] + nums[1] = 2 + 7 = 9. Hence indices are 0 and 1."
+      },
+      {
+        "input": "3 6\n3 2 4",
+        "output": "1 2",
+        "explanation": "nums[1] + nums[2] = 2 + 4 = 6. Hence indices are 1 and 2."
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "4 15\n2 7 8 11",
+        "output": "1 2"
+      },
+      {
+        "input": "4 -2\n-5 3 -2 1",
+        "output": "0 1"
+      }
+    ],
+    "starterCode": {
+      "python": "import sys\n\ndef solve():\n    lines = sys.stdin.read().split()\n    if not lines:\n        return\n    n = int(lines[0])\n    target = int(lines[1])\n    nums = [int(x) for x in lines[2:2+n]]\n    \n    lookup = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in lookup:\n            print(f\"{lookup[complement]} {i}\")\n            return\n        lookup[num] = i\n\nif __name__ == '__main__':\n    solve()\n",
+      "java": "import java.util.Scanner;\nimport java.util.HashMap;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNextInt()) return;\n        int n = sc.nextInt();\n        int target = sc.nextInt();\n        int[] nums = new int[n];\n        for (int i = 0; i < n; i++) nums[i] = sc.nextInt();\n        \n        HashMap<Integer, Integer> map = new HashMap<>();\n        for (int i = 0; i < n; i++) {\n            int comp = target - nums[i];\n            if (map.containsKey(comp)) {\n                System.out.println(map.get(comp) + \" \" + i);\n                return;\n            }\n            map.put(nums[i], i);\n        }\n    }\n}\n",
+      "cpp": "#include <iostream>\n#include <vector>\n#include <unordered_map>\n\nusing namespace std;\n\nint main() {\n    int n, target;\n    if (!(cin >> n >> target)) return 0;\n    vector<int> nums(n);\n    for (int i = 0; i < n; i++) cin >> nums[i];\n    \n    unordered_map<int, int> mp;\n    for (int i = 0; i < n; i++) {\n        int comp = target - nums[i];\n        if (mp.find(comp) != mp.end()) {\n            cout << mp[comp] << \" \" << i << \"\\n\";\n            return 0;\n        }\n        mp[nums[i]] = i;\n    }\n    return 0;\n}\n",
+      "c": "#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    int n, target;\n    if (scanf(\"%d %d\", &n, &target) != 2) return 0;\n    int *nums = (int*)malloc(n * sizeof(int));\n    for (int i = 0; i < n; i++) scanf(\"%d\", &nums[i]);\n    \n    for (int i = 0; i < n; i++) {\n        for (int j = i + 1; j < n; j++) {\n            if (nums[i] + nums[j] == target) {\n                printf(\"%d %d\\n\", i, j);\n                free(nums);\n                return 0;\n            }\n        }\n    }\n    free(nums);\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": 2,
+    "title": "Valid Parentheses Check",
+    "category": "Stack",
+    "type": "coding",
+    "difficulty": "Easy",
+    "timeLimit": 600,
+    "unlockedLetter": "E",
+    "description": "Given a string `s` containing just the characters `'('`, `')'`, `'{'`, `'}'`, `'['` and `']'`, determine if the input string is valid.\n\nAn input string is valid if:\n1. Open brackets must be closed by the same type of brackets.\n2. Open brackets must be closed in the correct order.\n3. Every close bracket has a corresponding open bracket of the same type.\n\nPrint `true` if the string is valid, or `false` otherwise.",
+    "inputFormat": "A single line containing the string `s`.",
+    "outputFormat": "Print `true` or `false`.",
+    "constraints": "1 <= s.length <= 10^4",
+    "sampleTestCases": [
+      {
+        "input": "()[]{}",
+        "output": "true",
+        "explanation": "All brackets open and close in correct sequence."
+      },
+      {
+        "input": "(]",
+        "output": "false",
+        "explanation": "Mismatched closing bracket."
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "{[()]}",
+        "output": "true"
+      },
+      {
+        "input": "([)]",
+        "output": "false"
+      }
+    ],
+    "starterCode": {
+      "python": "import sys\n\ndef is_valid(s):\n    stack = []\n    mapping = {')': '(', '}': '{', ']': '['}\n    for char in s:\n        if char in mapping:\n            top = stack.pop() if stack else '#'\n            if mapping[char] != top:\n                return False\n        else:\n            stack.append(char)\n    return len(stack) == 0\n\nif __name__ == '__main__':\n    s = sys.stdin.read().strip()\n    if not s:\n        print(\"true\")\n    else:\n        print(\"true\" if is_valid(s) else \"false\")\n",
+      "java": "import java.util.Scanner;\nimport java.util.Stack;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNext()) {\n            System.out.println(\"true\");\n            return;\n        }\n        String s = sc.next();\n        Stack<Character> stack = new Stack<>();\n        boolean valid = true;\n        for (char c : s.toCharArray()) {\n            if (c == '(' || c == '{' || c == '[') {\n                stack.push(c);\n            } else {\n                if (stack.isEmpty()) { valid = false; break; }\n                char top = stack.pop();\n                if ((c == ')' && top != '(') || (c == '}' && top != '{') || (c == ']' && top != '[')) {\n                    valid = false;\n                    break;\n                }\n            }\n        }\n        if (!stack.isEmpty()) valid = false;\n        System.out.println(valid ? \"true\" : \"false\");\n    }\n}\n",
+      "cpp": "#include <iostream>\n#include <stack>\n#include <string>\n\nusing namespace std;\n\nint main() {\n    string s;\n    if (!(cin >> s)) {\n        cout << \"true\\n\";\n        return 0;\n    }\n    stack<char> st;\n    bool valid = true;\n    for (char c : s) {\n        if (c == '(' || c == '{' || c == '[') {\n            st.push(c);\n        } else {\n            if (st.empty()) { valid = false; break; }\n            char top = st.top(); st.pop();\n            if ((c == ')' && top != '(') || (c == '}' && top != '{') || (c == ']' && top != '[')) {\n                valid = false; break;\n            }\n        }\n    }\n    if (!st.empty()) valid = false;\n    cout << (valid ? \"true\" : \"false\") << \"\\n\";\n    return 0;\n}\n",
+      "c": "#include <stdio.h>\n#include <string.h>\n#include <stdbool.h>\n\nint main() {\n    char s[10005];\n    if (scanf(\"%s\", s) != 1) {\n        printf(\"true\\n\");\n        return 0;\n    }\n    char stack[10005];\n    int top = -1;\n    bool valid = true;\n    for (int i = 0; s[i] != '\\0'; i++) {\n        char c = s[i];\n        if (c == '(' || c == '{' || c == '[') {\n            stack[++top] = c;\n        } else {\n            if (top == -1) { valid = false; break; }\n            char t = stack[top--];\n            if ((c == ')' && t != '(') || (c == '}' && t != '{') || (c == ']' && t != '[')) {\n                valid = false; break;\n            }\n        }\n    }\n    if (top != -1) valid = false;\n    printf(valid ? \"true\\n\" : \"false\\n\");\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": 3,
+    "title": "Maximum Subarray (Kadane's Algorithm)",
+    "category": "Dynamic Programming",
+    "type": "coding",
+    "difficulty": "Medium",
+    "timeLimit": 600,
+    "unlockedLetter": "B",
+    "description": "Given an integer array `nums`, find the subarray with the largest sum, and print its sum.\n\nA subarray is a contiguous non-empty sequence of elements within an array.",
+    "inputFormat": "First line contains integer `N` (number of elements).\nSecond line contains `N` space-separated integers.",
+    "outputFormat": "Print a single integer representing the maximum subarray sum.",
+    "constraints": "1 <= N <= 10^5\n-10^4 <= nums[i] <= 10^4",
+    "sampleTestCases": [
+      {
+        "input": "9\n-2 1 -3 4 -1 2 1 -5 4",
+        "output": "6",
+        "explanation": "The subarray [4,-1,2,1] has the largest sum 6."
+      },
+      {
+        "input": "1\n1",
+        "output": "1",
+        "explanation": "Single element max sum is 1."
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "5\n5 4 -1 7 8",
+        "output": "23"
+      },
+      {
+        "input": "4\n-3 -2 -1 -4",
+        "output": "-1"
+      }
+    ],
+    "starterCode": {
+      "python": "import sys\n\ndef max_subarray():\n    tokens = sys.stdin.read().split()\n    if not tokens:\n        return\n    n = int(tokens[0])\n    nums = [int(x) for x in tokens[1:1+n]]\n    \n    max_so_far = nums[0]\n    curr_max = nums[0]\n    for x in nums[1:]:\n        curr_max = max(x, curr_max + x)\n        max_so_far = max(max_so_far, curr_max)\n    print(max_so_far)\n\nif __name__ == '__main__':\n    max_subarray()\n",
+      "java": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNextInt()) return;\n        int n = sc.nextInt();\n        long maxSoFar = sc.nextLong();\n        long currMax = maxSoFar;\n        for (int i = 1; i < n; i++) {\n            long x = sc.nextLong();\n            currMax = Math.max(x, currMax + x);\n            maxSoFar = Math.max(maxSoFar, currMax);\n        }\n        System.out.println(maxSoFar);\n    }\n}\n",
+      "cpp": "#include <iostream>\n#include <algorithm>\n\nusing namespace std;\n\nint main() {\n    int n;\n    if (!(cin >> n)) return 0;\n    long long max_so_far, curr_max, x;\n    cin >> max_so_far;\n    curr_max = max_so_far;\n    for (int i = 1; i < n; i++) {\n        cin >> x;\n        curr_max = max(x, curr_max + x);\n        max_so_far = max(max_so_far, curr_max);\n    }\n    cout << max_so_far << \"\\n\";\n    return 0;\n}\n",
+      "c": "#include <stdio.h>\n\nint main() {\n    int n;\n    if (scanf(\"%d\", &n) != 1) return 0;\n    long long max_so_far, curr_max, x;\n    scanf(\"%lld\", &max_so_far);\n    curr_max = max_so_far;\n    for (int i = 1; i < n; i++) {\n        scanf(\"%lld\", &x);\n        curr_max = (x > curr_max + x) ? x : (curr_max + x);\n        max_so_far = (max_so_far > curr_max) ? max_so_far : curr_max;\n    }\n    printf(\"%lld\\n\", max_so_far);\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": 4,
+    "title": "Longest Substring Without Repeating Characters",
+    "category": "Sliding Window",
+    "type": "coding",
+    "difficulty": "Medium",
+    "timeLimit": 600,
+    "unlockedLetter": "U",
+    "description": "Given a string `s`, find the length of the longest substring without repeating characters.",
+    "inputFormat": "A single line containing the string `s`.",
+    "outputFormat": "Print a single integer representing the length of the longest non-repeating substring.",
+    "constraints": "0 <= s.length <= 5 * 10^4",
+    "sampleTestCases": [
+      {
+        "input": "abcabcbb",
+        "output": "3",
+        "explanation": "The answer is 'abc', with the length of 3."
+      },
+      {
+        "input": "bbbbb",
+        "output": "1",
+        "explanation": "The answer is 'b', with the length of 1."
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "pwwkew",
+        "output": "3"
+      },
+      {
+        "input": "abcdefg",
+        "output": "7"
+      }
+    ],
+    "starterCode": {
+      "python": "import sys\n\ndef length_of_longest_substring(s):\n    char_index = {}\n    max_len = 0\n    left = 0\n    for right, c in enumerate(s):\n        if c in char_index and char_index[c] >= left:\n            left = char_index[c] + 1\n        char_index[c] = right\n        max_len = max(max_len, right - left + 1)\n    return max_len\n\nif __name__ == '__main__':\n    s = sys.stdin.readline().rstrip('\\r\\n')\n    print(length_of_longest_substring(s))\n",
+      "java": "import java.util.Scanner;\nimport java.util.HashMap;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        String s = sc.hasNextLine() ? sc.nextLine().trim() : \"\";\n        HashMap<Character, Integer> map = new HashMap<>();\n        int maxLen = 0, left = 0;\n        for (int right = 0; right < s.length(); right++) {\n            char c = s.charAt(right);\n            if (map.containsKey(c) && map.get(c) >= left) {\n                left = map.get(c) + 1;\n            }\n            map.put(c, right);\n            maxLen = Math.max(maxLen, right - left + 1);\n        }\n        System.out.println(maxLen);\n    }\n}\n",
+      "cpp": "#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n\nusing namespace std;\n\nint main() {\n    string s;\n    if (!getline(cin, s)) {\n        cout << 0 << \"\\n\";\n        return 0;\n    }\n    vector<int> last(256, -1);\n    int max_len = 0, left = 0;\n    for (int right = 0; right < (int)s.length(); right++) {\n        unsigned char c = s[right];\n        if (last[c] >= left) {\n            left = last[c] + 1;\n        }\n        last[c] = right;\n        max_len = max(max_len, right - left + 1);\n    }\n    cout << max_len << \"\\n\";\n    return 0;\n}\n",
+      "c": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char s[50005];\n    if (!fgets(s, sizeof(s), stdin)) {\n        printf(\"0\\n\");\n        return 0;\n    }\n    int len = strlen(s);\n    while (len > 0 && (s[len-1] == '\\n' || s[len-1] == '\\r')) s[--len] = '\\0';\n    int last[256];\n    for (int i = 0; i < 256; i++) last[i] = -1;\n    int max_len = 0, left = 0;\n    for (int right = 0; right < len; right++) {\n        unsigned char c = s[right];\n        if (last[c] >= left) left = last[c] + 1;\n        last[c] = right;\n        int cur = right - left + 1;\n        if (cur > max_len) max_len = cur;\n    }\n    printf(\"%d\\n\", max_len);\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": 5,
+    "title": "Best Time to Buy and Sell Stock",
+    "category": "Arrays",
+    "type": "coding",
+    "difficulty": "Easy",
+    "timeLimit": 600,
+    "unlockedLetter": "L",
+    "description": "You are given an array `prices` where `prices[i]` is the price of a given stock on the `i`-th day.\n\nYou want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.\n\nPrint the maximum profit you can achieve from this transaction. If you cannot achieve any profit, print `0`.",
+    "inputFormat": "First line contains integer `N` (number of days).\nSecond line contains `N` space-separated integers representing prices.",
+    "outputFormat": "Print the maximum possible profit.",
+    "constraints": "1 <= N <= 10^5\n0 <= prices[i] <= 10^4",
+    "sampleTestCases": [
+      {
+        "input": "6\n7 1 5 3 6 4",
+        "output": "5",
+        "explanation": "Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6 - 1 = 5."
+      },
+      {
+        "input": "5\n7 6 4 3 1",
+        "output": "0",
+        "explanation": "No profitable transactions possible."
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "4\n1 2 3 4",
+        "output": "3"
+      },
+      {
+        "input": "5\n2 4 1 7 5",
+        "output": "6"
+      }
+    ],
+    "starterCode": {
+      "python": "import sys\n\ndef max_profit():\n    data = sys.stdin.read().split()\n    if not data:\n        return\n    n = int(data[0])\n    prices = [int(x) for x in data[1:1+n]]\n    \n    min_price = float('inf')\n    max_prof = 0\n    for p in prices:\n        if p < min_price:\n            min_price = p\n        elif p - min_price > max_prof:\n            max_prof = p - min_price\n    print(max_prof)\n\nif __name__ == '__main__':\n    max_profit()\n",
+      "java": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNextInt()) return;\n        int n = sc.nextInt();\n        int minPrice = Integer.MAX_VALUE;\n        int maxProfit = 0;\n        for (int i = 0; i < n; i++) {\n            int p = sc.nextInt();\n            if (p < minPrice) minPrice = p;\n            else if (p - minPrice > maxProfit) maxProfit = p - minPrice;\n        }\n        System.out.println(maxProfit);\n    }\n}\n",
+      "cpp": "#include <iostream>\n#include <algorithm>\n\nusing namespace std;\n\nint main() {\n    int n;\n    if (!(cin >> n)) return 0;\n    int min_price = 1e9, max_profit = 0, p;\n    for (int i = 0; i < n; i++) {\n        cin >> p;\n        min_price = min(min_price, p);\n        max_profit = max(max_profit, p - min_price);\n    }\n    cout << max_profit << \"\\n\";\n    return 0;\n}\n",
+      "c": "#include <stdio.h>\n\nint main() {\n    int n;\n    if (scanf(\"%d\", &n) != 1) return 0;\n    int min_price = 1000000000, max_profit = 0, p;\n    for (int i = 0; i < n; i++) {\n        scanf(\"%d\", &p);\n        if (p < min_price) min_price = p;\n        else if (p - min_price > max_profit) max_profit = p - min_price;\n    }\n    printf(\"%d\\n\", max_profit);\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": 6,
+    "title": "Search in Rotated Sorted Array",
+    "category": "Binary Search",
+    "type": "coding",
+    "difficulty": "Medium",
+    "timeLimit": 600,
+    "unlockedLetter": "A",
+    "description": "There is an integer array `nums` sorted in ascending order (with distinct values).\n\nPrior to being passed to your function, `nums` is possibly rotated at an unknown pivot index `k` (1 <= k < nums.length).\n\nGiven the array `nums` and an integer `target`, print the 0-based index of `target` if it is in `nums`, or `-1` if it is not in `nums`. Your algorithm should achieve O(log n) time complexity.",
+    "inputFormat": "First line contains integer `N` and integer `target`.\nSecond line contains `N` space-separated integers representing the rotated array.",
+    "outputFormat": "Print the index of target or -1.",
+    "constraints": "1 <= N <= 10^5\n-10^9 <= nums[i], target <= 10^9",
+    "sampleTestCases": [
+      {
+        "input": "7 0\n4 5 6 7 0 1 2",
+        "output": "4",
+        "explanation": "Element 0 is at index 4."
+      },
+      {
+        "input": "7 3\n4 5 6 7 0 1 2",
+        "output": "-1",
+        "explanation": "Element 3 is not present in the array."
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "1 0\n0",
+        "output": "0"
+      },
+      {
+        "input": "5 1\n5 1 2 3 4",
+        "output": "1"
+      }
+    ],
+    "starterCode": {
+      "python": "import sys\n\ndef search_rotated():\n    data = sys.stdin.read().split()\n    if not data:\n        return\n    n = int(data[0])\n    target = int(data[1])\n    nums = [int(x) for x in data[2:2+n]]\n    \n    left, right = 0, n - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if nums[mid] == target:\n            print(mid)\n            return\n        if nums[left] <= nums[mid]:\n            if nums[left] <= target < nums[mid]:\n                right = mid - 1\n            else:\n                left = mid + 1\n        else:\n            if nums[mid] < target <= nums[right]:\n                left = mid + 1\n            else:\n                right = mid - 1\n    print(-1)\n\nif __name__ == '__main__':\n    search_rotated()\n",
+      "java": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNextInt()) return;\n        int n = sc.nextInt();\n        int target = sc.nextInt();\n        int[] nums = new int[n];\n        for (int i = 0; i < n; i++) nums[i] = sc.nextInt();\n        \n        int left = 0, right = n - 1;\n        int ans = -1;\n        while (left <= right) {\n            int mid = left + (right - left) / 2;\n            if (nums[mid] == target) { ans = mid; break; }\n            if (nums[left] <= nums[mid]) {\n                if (nums[left] <= target && target < nums[mid]) right = mid - 1;\n                else left = mid + 1;\n            } else {\n                if (nums[mid] < target && target <= nums[right]) left = mid + 1;\n                else right = mid - 1;\n            }\n        }\n        System.out.println(ans);\n    }\n}\n",
+      "cpp": "#include <iostream>\n#include <vector>\n\nusing namespace std;\n\nint main() {\n    int n, target;\n    if (!(cin >> n >> target)) return 0;\n    vector<int> nums(n);\n    for (int i = 0; i < n; i++) cin >> nums[i];\n    \n    int left = 0, right = n - 1, ans = -1;\n    while (left <= right) {\n        int mid = left + (right - left) / 2;\n        if (nums[mid] == target) { ans = mid; break; }\n        if (nums[left] <= nums[mid]) {\n            if (nums[left] <= target && target < nums[mid]) right = mid - 1;\n            else left = mid + 1;\n        } else {\n            if (nums[mid] < target && target <= nums[right]) left = mid + 1;\n            else right = mid - 1;\n        }\n    }\n    cout << ans << \"\\n\";\n    return 0;\n}\n",
+      "c": "#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    int n, target;\n    if (scanf(\"%d %d\", &n, &target) != 2) return 0;\n    int *nums = (int*)malloc(n * sizeof(int));\n    for (int i = 0; i < n; i++) scanf(\"%d\", &nums[i]);\n    \n    int left = 0, right = n - 1, ans = -1;\n    while (left <= right) {\n        int mid = left + (right - left) / 2;\n        if (nums[mid] == target) { ans = mid; break; }\n        if (nums[left] <= nums[mid]) {\n            if (nums[left] <= target && target < nums[mid]) right = mid - 1;\n            else left = mid + 1;\n        } else {\n            if (nums[mid] < target && target <= nums[right]) left = mid + 1;\n            else right = mid - 1;\n        }\n    }\n    printf(\"%d\\n\", ans);\n    free(nums);\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": 7,
+    "title": "Find Missing Number in Sequence",
+    "category": "Math & Bit Manipulation",
+    "type": "coding",
+    "difficulty": "Easy",
+    "timeLimit": 600,
+    "unlockedLetter": "2",
+    "description": "Given an array `nums` containing `n` distinct numbers in the range `[0, n]`, print the only number in the range that is missing from the array.",
+    "inputFormat": "First line contains integer `N` (number of elements in array).\nSecond line contains `N` distinct space-separated integers in the range `[0, N]`.",
+    "outputFormat": "Print the single missing integer.",
+    "constraints": "1 <= N <= 10^5\nAll elements of nums are unique and between 0 and N.",
+    "sampleTestCases": [
+      {
+        "input": "3\n3 0 1",
+        "output": "2",
+        "explanation": "n = 3, range [0,3], missing number is 2."
+      },
+      {
+        "input": "2\n0 1",
+        "output": "2",
+        "explanation": "n = 2, range [0,2], missing number is 2."
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "9\n9 6 4 2 3 5 7 0 1",
+        "output": "8"
+      },
+      {
+        "input": "1\n0",
+        "output": "1"
+      }
+    ],
+    "starterCode": {
+      "python": "import sys\n\ndef missing_number():\n    data = sys.stdin.read().split()\n    if not data:\n        return\n    n = int(data[0])\n    nums = [int(x) for x in data[1:1+n]]\n    \n    expected_sum = n * (n + 1) // 2\n    actual_sum = sum(nums)\n    print(expected_sum - actual_sum)\n\nif __name__ == '__main__':\n    missing_number()\n",
+      "java": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNextInt()) return;\n        int n = sc.nextInt();\n        long expected = (long) n * (n + 1) / 2;\n        long actual = 0;\n        for (int i = 0; i < n; i++) actual += sc.nextLong();\n        System.out.println(expected - actual);\n    }\n}\n",
+      "cpp": "#include <iostream>\n\nusing namespace std;\n\nint main() {\n    long long n;\n    if (!(cin >> n)) return 0;\n    long long expected = n * (n + 1) / 2;\n    long long actual = 0, val;\n    for (int i = 0; i < n; i++) {\n        cin >> val;\n        actual += val;\n    }\n    cout << (expected - actual) << \"\\n\";\n    return 0;\n}\n",
+      "c": "#include <stdio.h>\n\nint main() {\n    long long n;\n    if (scanf(\"%lld\", &n) != 1) return 0;\n    long long expected = n * (n + 1) / 2;\n    long long actual = 0, val;\n    for (int i = 0; i < n; i++) {\n        scanf(\"%lld\", &val);\n        actual += val;\n    }\n    printf(\"%lld\\n\", expected - actual);\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": 8,
+    "title": "Climbing Stairs (Ways to Reach N)",
+    "category": "Dynamic Programming",
+    "type": "coding",
+    "difficulty": "Easy",
+    "timeLimit": 600,
+    "unlockedLetter": "6",
+    "description": "You are climbing a staircase. It takes `n` steps to reach the top.\n\nEach time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?",
+    "inputFormat": "A single integer `n`.",
+    "outputFormat": "Print the total number of distinct ways to climb to the top.",
+    "constraints": "1 <= n <= 45",
+    "sampleTestCases": [
+      {
+        "input": "2",
+        "output": "2",
+        "explanation": "1. 1 step + 1 step\n2. 2 steps"
+      },
+      {
+        "input": "3",
+        "output": "3",
+        "explanation": "1. 1 + 1 + 1\n2. 1 + 2\n3. 2 + 1"
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "4",
+        "output": "5"
+      },
+      {
+        "input": "10",
+        "output": "89"
+      }
+    ],
+    "starterCode": {
+      "python": "import sys\n\ndef climb_stairs(n):\n    if n <= 2:\n        return n\n    a, b = 1, 2\n    for _ in range(3, n + 1):\n        a, b = b, a + b\n    return b\n\nif __name__ == '__main__':\n    inp = sys.stdin.read().strip()\n    if inp:\n        print(climb_stairs(int(inp)))\n",
+      "java": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNextInt()) return;\n        int n = sc.nextInt();\n        if (n <= 2) { System.out.println(n); return; }\n        long a = 1, b = 2;\n        for (int i = 3; i <= n; i++) {\n            long temp = a + b;\n            a = b;\n            b = temp;\n        }\n        System.out.println(b);\n    }\n}\n",
+      "cpp": "#include <iostream>\n\nusing namespace std;\n\nint main() {\n    int n;\n    if (!(cin >> n)) return 0;\n    if (n <= 2) { cout << n << \"\\n\"; return 0; }\n    long long a = 1, b = 2;\n    for (int i = 3; i <= n; i++) {\n        long long next = a + b;\n        a = b;\n        b = next;\n    }\n    cout << b << \"\\n\";\n    return 0;\n}\n",
+      "c": "#include <stdio.h>\n\nint main() {\n    int n;\n    if (scanf(\"%d\", &n) != 1) return 0;\n    if (n <= 2) { printf(\"%d\\n\", n); return 0; }\n    long long a = 1, b = 2;\n    for (int i = 3; i <= n; i++) {\n        long long next = a + b;\n        a = b;\n        b = next;\n    }\n    printf(\"%lld\\n\", b);\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": 9,
+    "title": "Move Zeroes to End",
+    "category": "Arrays & Two Pointers",
+    "type": "coding",
+    "difficulty": "Easy",
+    "timeLimit": 600,
+    "unlockedLetter": "C",
+    "description": "Given an integer array `nums`, move all `0`'s to the end of it while maintaining the relative order of the non-zero elements.\n\nNote that you must do this in-place without making a copy of the array. Print the modified array as space-separated integers.",
+    "inputFormat": "First line contains integer `N`.\nSecond line contains `N` space-separated integers.",
+    "outputFormat": "Print the space-separated modified array.",
+    "constraints": "1 <= N <= 10^4\n-2^31 <= nums[i] <= 2^31 - 1",
+    "sampleTestCases": [
+      {
+        "input": "5\n0 1 0 3 12",
+        "output": "1 3 12 0 0",
+        "explanation": "Non-zeros 1, 3, 12 maintain relative order, zeros pushed to end."
+      },
+      {
+        "input": "1\n0",
+        "output": "0",
+        "explanation": "Single zero remains 0."
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "4\n4 2 4 0",
+        "output": "4 2 4 0"
+      },
+      {
+        "input": "4\n0 0 1 2",
+        "output": "1 2 0 0"
+      }
+    ],
+    "starterCode": {
+      "python": "import sys\n\ndef move_zeroes():\n    data = sys.stdin.read().split()\n    if not data:\n        return\n    n = int(data[0])\n    nums = [int(x) for x in data[1:1+n]]\n    \n    insert_pos = 0\n    for num in nums:\n        if num != 0:\n            nums[insert_pos] = num\n            insert_pos += 1\n    while insert_pos < n:\n        nums[insert_pos] = 0\n        insert_pos += 1\n        \n    print(\" \".join(map(str, nums)))\n\nif __name__ == '__main__':\n    move_zeroes()\n",
+      "java": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNextInt()) return;\n        int n = sc.nextInt();\n        int[] nums = new int[n];\n        int pos = 0;\n        for (int i = 0; i < n; i++) {\n            int val = sc.nextInt();\n            if (val != 0) nums[pos++] = val;\n        }\n        while (pos < n) nums[pos++] = 0;\n        \n        StringBuilder sb = new StringBuilder();\n        for (int i = 0; i < n; i++) {\n            sb.append(nums[i]);\n            if (i < n - 1) sb.append(\" \");\n        }\n        System.out.println(sb.toString());\n    }\n}\n",
+      "cpp": "#include <iostream>\n#include <vector>\n\nusing namespace std;\n\nint main() {\n    int n;\n    if (!(cin >> n)) return 0;\n    vector<int> nums(n, 0);\n    int pos = 0;\n    for (int i = 0; i < n; i++) {\n        int val;\n        cin >> val;\n        if (val != 0) nums[pos++] = val;\n    }\n    for (int i = 0; i < n; i++) {\n        cout << nums[i] << (i + 1 < n ? \" \" : \"\");\n    }\n    cout << \"\\n\";\n    return 0;\n}\n",
+      "c": "#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    int n;\n    if (scanf(\"%d\", &n) != 1) return 0;\n    int *nums = (int*)calloc(n, sizeof(int));\n    int pos = 0;\n    for (int i = 0; i < n; i++) {\n        int val;\n        scanf(\"%d\", &val);\n        if (val != 0) nums[pos++] = val;\n    }\n    for (int i = 0; i < n; i++) {\n        printf(\"%d%s\", nums[i], (i + 1 < n ? \" \" : \"\"));\n    }\n    printf(\"\\n\");\n    free(nums);\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": 10,
+    "title": "Valid Anagram Verification",
+    "category": "Strings & Hashing",
+    "type": "coding",
+    "difficulty": "Easy",
+    "timeLimit": 600,
+    "unlockedLetter": "O",
+    "description": "Given two strings `s` and `t`, print `true` if `t` is an anagram of `s`, and `false` otherwise.\n\nAn Anagram is a word formed by rearranging the letters of a different word, typically using all the original letters exactly once.",
+    "inputFormat": "Two lines or two space-separated words: string `s` and string `t`.",
+    "outputFormat": "Print `true` or `false`.",
+    "constraints": "1 <= s.length, t.length <= 5 * 10^4\ns and t consist of lowercase English letters.",
+    "sampleTestCases": [
+      {
+        "input": "anagram nagaram",
+        "output": "true",
+        "explanation": "Both strings have identical frequency of letters."
+      },
+      {
+        "input": "rat car",
+        "output": "false",
+        "explanation": "Different characters."
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "listen silent",
+        "output": "true"
+      },
+      {
+        "input": "hello world",
+        "output": "false"
+      }
+    ],
+    "starterCode": {
+      "python": "import sys\nfrom collections import Counter\n\ndef is_anagram():\n    data = sys.stdin.read().split()\n    if len(data) < 2:\n        return\n    s, t = data[0], data[1]\n    print(\"true\" if Counter(s) == Counter(t) else \"false\")\n\nif __name__ == '__main__':\n    is_anagram()\n",
+      "java": "import java.util.Scanner;\nimport java.util.Arrays;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNext()) return;\n        String s = sc.next();\n        String t = sc.next();\n        if (s.length() != t.length()) {\n            System.out.println(\"false\");\n            return;\n        }\n        int[] count = new int[26];\n        for (int i = 0; i < s.length(); i++) {\n            count[s.charAt(i) - 'a']++;\n            count[t.charAt(i) - 'a']--;\n        }\n        for (int c : count) {\n            if (c != 0) {\n                System.out.println(\"false\");\n                return;\n            }\n        }\n        System.out.println(\"true\");\n    }\n}\n",
+      "cpp": "#include <iostream>\n#include <string>\n#include <vector>\n\nusing namespace std;\n\nint main() {\n    string s, t;\n    if (!(cin >> s >> t)) return 0;\n    if (s.length() != t.length()) {\n        cout << \"false\\n\";\n        return 0;\n    }\n    vector<int> cnt(26, 0);\n    for (int i = 0; i < (int)s.length(); i++) {\n        cnt[s[i] - 'a']++;\n        cnt[t[i] - 'a']--;\n    }\n    for (int c : cnt) {\n        if (c != 0) {\n            cout << \"false\\n\";\n            return 0;\n        }\n    }\n    cout << \"true\\n\";\n    return 0;\n}\n",
+      "c": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char s[50005], t[50005];\n    if (scanf(\"%s %s\", s, t) != 2) return 0;\n    if (strlen(s) != strlen(t)) {\n        printf(\"false\\n\");\n        return 0;\n    }\n    int cnt[26] = {0};\n    for (int i = 0; s[i] != '\\0'; i++) {\n        cnt[s[i] - 'a']++;\n        cnt[t[i] - 'a']--;\n    }\n    for (int i = 0; i < 26; i++) {\n        if (cnt[i] != 0) {\n            printf(\"false\\n\");\n            return 0;\n        }\n    }\n    printf(\"true\\n\");\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": 11,
+    "title": "Majority Element",
+    "category": "Arrays & Boyer-Moore",
+    "type": "coding",
+    "difficulty": "Easy",
+    "timeLimit": 600,
+    "unlockedLetter": "D",
+    "description": "Given an array `nums` of size `n`, print the majority element.\n\nThe majority element is the element that appears more than `⌊n / 2⌋` times. You may assume that the majority element always exists in the array.",
+    "inputFormat": "First line contains integer `N`.\nSecond line contains `N` space-separated integers.",
+    "outputFormat": "Print the single majority element.",
+    "constraints": "1 <= N <= 5 * 10^4\n-10^9 <= nums[i] <= 10^9",
+    "sampleTestCases": [
+      {
+        "input": "3\n3 2 3",
+        "output": "3",
+        "explanation": "3 appears 2 times, which is > 3 / 2."
+      },
+      {
+        "input": "7\n2 2 1 1 1 2 2",
+        "output": "2",
+        "explanation": "2 appears 4 times, which is > 7 / 2."
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "1\n100",
+        "output": "100"
+      },
+      {
+        "input": "5\n6 5 5 5 2",
+        "output": "5"
+      }
+    ],
+    "starterCode": {
+      "python": "import sys\n\ndef majority_element():\n    data = sys.stdin.read().split()\n    if not data:\n        return\n    n = int(data[0])\n    nums = [int(x) for x in data[1:1+n]]\n    \n    count = 0\n    candidate = None\n    for num in nums:\n        if count == 0:\n            candidate = num\n        count += (1 if num == candidate else -1)\n    print(candidate)\n\nif __name__ == '__main__':\n    majority_element()\n",
+      "java": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNextInt()) return;\n        int n = sc.nextInt();\n        int candidate = 0, count = 0;\n        for (int i = 0; i < n; i++) {\n            int val = sc.nextInt();\n            if (count == 0) candidate = val;\n            count += (val == candidate) ? 1 : -1;\n        }\n        System.out.println(candidate);\n    }\n}\n",
+      "cpp": "#include <iostream>\n\nusing namespace std;\n\nint main() {\n    int n;\n    if (!(cin >> n)) return 0;\n    int candidate = 0, count = 0, val;\n    for (int i = 0; i < n; i++) {\n        cin >> val;\n        if (count == 0) candidate = val;\n        count += (val == candidate) ? 1 : -1;\n    }\n    cout << candidate << \"\\n\";\n    return 0;\n}\n",
+      "c": "#include <stdio.h>\n\nint main() {\n    int n;\n    if (scanf(\"%d\", &n) != 1) return 0;\n    int candidate = 0, count = 0, val;\n    for (int i = 0; i < n; i++) {\n        scanf(\"%d\", &val);\n        if (count == 0) candidate = val;\n        count += (val == candidate) ? 1 : -1;\n    }\n    printf(\"%d\\n\", candidate);\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": 12,
+    "title": "Palindrome Number Check",
+    "category": "Math",
+    "type": "coding",
+    "difficulty": "Easy",
+    "timeLimit": 600,
+    "unlockedLetter": "E",
+    "description": "Given an integer `x`, print `true` if `x` is a palindrome, and `false` otherwise.\n\nAn integer is a palindrome when it reads the same forward and backward. Note: negative numbers are not palindromes.",
+    "inputFormat": "A single integer `x`.",
+    "outputFormat": "Print `true` or `false`.",
+    "constraints": "-2^31 <= x <= 2^31 - 1",
+    "sampleTestCases": [
+      {
+        "input": "121",
+        "output": "true",
+        "explanation": "121 reads as 121 from left to right and right to left."
+      },
+      {
+        "input": "-121",
+        "output": "false",
+        "explanation": "From left to right it reads -121, but from right to left it is 121-."
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "10",
+        "output": "false"
+      },
+      {
+        "input": "12321",
+        "output": "true"
+      }
+    ],
+    "starterCode": {
+      "python": "import sys\n\ndef is_palindrome():\n    s = sys.stdin.read().strip()\n    if not s:\n        return\n    print(\"true\" if s == s[::-1] else \"false\")\n\nif __name__ == '__main__':\n    is_palindrome()\n",
+      "java": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNext()) return;\n        String s = sc.next();\n        String rev = new StringBuilder(s).reverse().toString();\n        System.out.println(s.equals(rev) ? \"true\" : \"false\");\n    }\n}\n",
+      "cpp": "#include <iostream>\n#include <string>\n#include <algorithm>\n\nusing namespace std;\n\nint main() {\n    string s;\n    if (!(cin >> s)) return 0;\n    string rev = s;\n    reverse(rev.begin(), rev.end());\n    cout << (s == rev ? \"true\" : \"false\") << \"\\n\";\n    return 0;\n}\n",
+      "c": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char s[64];\n    if (scanf(\"%s\", s) != 1) return 0;\n    int len = strlen(s);\n    int is_pal = 1;\n    for (int i = 0; i < len / 2; i++) {\n        if (s[i] != s[len - 1 - i]) {\n            is_pal = 0;\n            break;\n        }\n    }\n    printf(is_pal ? \"true\\n\" : \"false\\n\");\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": 13,
+    "title": "Contains Duplicate",
+    "category": "Arrays & Sets",
+    "type": "coding",
+    "difficulty": "Easy",
+    "timeLimit": 600,
+    "unlockedLetter": "F",
+    "description": "Given an integer array `nums`, print `true` if any value appears at least twice in the array, and print `false` if every element is distinct.",
+    "inputFormat": "First line contains integer `N`.\nSecond line contains `N` space-separated integers.",
+    "outputFormat": "Print `true` or `false`.",
+    "constraints": "1 <= N <= 10^5\n-10^9 <= nums[i] <= 10^9",
+    "sampleTestCases": [
+      {
+        "input": "4\n1 2 3 1",
+        "output": "true",
+        "explanation": "1 appears twice."
+      },
+      {
+        "input": "4\n1 2 3 4",
+        "output": "false",
+        "explanation": "All elements are unique."
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "10\n1 1 1 3 3 4 3 2 4 2",
+        "output": "true"
+      },
+      {
+        "input": "1\n99",
+        "output": "false"
+      }
+    ],
+    "starterCode": {
+      "python": "import sys\n\ndef contains_duplicate():\n    data = sys.stdin.read().split()\n    if not data:\n        return\n    n = int(data[0])\n    nums = [int(x) for x in data[1:1+n]]\n    print(\"true\" if len(nums) != len(set(nums)) else \"false\")\n\nif __name__ == '__main__':\n    contains_duplicate()\n",
+      "java": "import java.util.Scanner;\nimport java.util.HashSet;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNextInt()) return;\n        int n = sc.nextInt();\n        HashSet<Integer> set = new HashSet<>();\n        boolean duplicate = false;\n        for (int i = 0; i < n; i++) {\n            int v = sc.nextInt();\n            if (!set.add(v)) {\n                duplicate = true;\n            }\n        }\n        System.out.println(duplicate ? \"true\" : \"false\");\n    }\n}\n",
+      "cpp": "#include <iostream>\n#include <unordered_set>\n\nusing namespace std;\n\nint main() {\n    int n;\n    if (!(cin >> n)) return 0;\n    unordered_set<int> st;\n    bool duplicate = false;\n    for (int i = 0; i < n; i++) {\n        int v;\n        cin >> v;\n        if (!duplicate && st.count(v)) duplicate = true;\n        st.insert(v);\n    }\n    cout << (duplicate ? \"true\" : \"false\") << \"\\n\";\n    return 0;\n}\n",
+      "c": "#include <stdio.h>\n#include <stdlib.h>\n\nint compare(const void *a, const void *b) {\n    long long diff = (*(long long*)a - *(long long*)b);\n    return (diff > 0) - (diff < 0);\n}\n\nint main() {\n    int n;\n    if (scanf(\"%d\", &n) != 1) return 0;\n    long long *arr = (long long*)malloc(n * sizeof(long long));\n    for (int i = 0; i < n; i++) scanf(\"%lld\", &arr[i]);\n    qsort(arr, n, sizeof(long long), compare);\n    int dup = 0;\n    for (int i = 1; i < n; i++) {\n        if (arr[i] == arr[i - 1]) {\n            dup = 1;\n            break;\n        }\n    }\n    printf(dup ? \"true\\n\" : \"false\\n\");\n    free(arr);\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": 14,
+    "title": "Merge Two Sorted Arrays",
+    "category": "Two Pointers",
+    "type": "coding",
+    "difficulty": "Easy",
+    "timeLimit": 600,
+    "unlockedLetter": "I",
+    "description": "You are given two sorted integer arrays `nums1` and `nums2`. Merge the two arrays into a single sorted array and print all elements in non-decreasing order separated by spaces.",
+    "inputFormat": "First line contains `M` and `N` (sizes of nums1 and nums2).\nSecond line contains `M` sorted integers for nums1.\nThird line contains `N` sorted integers for nums2.",
+    "outputFormat": "Print the merged sorted integers separated by a single space.",
+    "constraints": "0 <= M, N <= 10^4\nM + N >= 1\n-10^9 <= elements <= 10^9",
+    "sampleTestCases": [
+      {
+        "input": "3 3\n1 2 3\n2 5 6",
+        "output": "1 2 2 3 5 6",
+        "explanation": "Merged and sorted sequence."
+      },
+      {
+        "input": "1 0\n1\n",
+        "output": "1",
+        "explanation": "nums2 is empty."
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "2 2\n2 4\n1 3",
+        "output": "1 2 3 4"
+      },
+      {
+        "input": "3 1\n4 5 6\n1",
+        "output": "1 4 5 6"
+      }
+    ],
+    "starterCode": {
+      "python": "import sys\n\ndef merge_sorted():\n    data = sys.stdin.read().split()\n    if not data:\n        return\n    m = int(data[0])\n    n = int(data[1])\n    idx = 2\n    nums1 = [int(x) for x in data[idx:idx+m]]\n    idx += m\n    nums2 = [int(x) for x in data[idx:idx+n]]\n    \n    i, j = 0, 0\n    res = []\n    while i < m and j < n:\n        if nums1[i] <= nums2[j]:\n            res.append(nums1[i])\n            i += 1\n        else:\n            res.append(nums2[j])\n            j += 1\n    res.extend(nums1[i:])\n    res.extend(nums2[j:])\n    print(\" \".join(map(str, res)))\n\nif __name__ == '__main__':\n    merge_sorted()\n",
+      "java": "import java.util.Scanner;\nimport java.util.ArrayList;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNextInt()) return;\n        int m = sc.nextInt();\n        int n = sc.nextInt();\n        int[] a = new int[m];\n        int[] b = new int[n];\n        for (int i = 0; i < m; i++) a[i] = sc.nextInt();\n        for (int i = 0; i < n; i++) b[i] = sc.nextInt();\n        \n        int i = 0, j = 0;\n        StringBuilder sb = new StringBuilder();\n        while (i < m && j < n) {\n            if (a[i] <= b[j]) sb.append(a[i++]).append(\" \");\n            else sb.append(b[j++]).append(\" \");\n        }\n        while (i < m) sb.append(a[i++]).append(\" \");\n        while (j < n) sb.append(b[j++]).append(\" \");\n        System.out.println(sb.toString().trim());\n    }\n}\n",
+      "cpp": "#include <iostream>\n#include <vector>\n\nusing namespace std;\n\nint main() {\n    int m, n;\n    if (!(cin >> m >> n)) return 0;\n    vector<int> a(m), b(n);\n    for (int i = 0; i < m; i++) cin >> a[i];\n    for (int i = 0; i < n; i++) cin >> b[i];\n    \n    int i = 0, j = 0;\n    bool first = true;\n    while (i < m && j < n) {\n        if (!first) cout << \" \";\n        if (a[i] <= b[j]) cout << a[i++];\n        else cout << b[j++];\n        first = false;\n    }\n    while (i < m) {\n        if (!first) cout << \" \";\n        cout << a[i++];\n        first = false;\n    }\n    while (j < n) {\n        if (!first) cout << \" \";\n        cout << b[j++];\n        first = false;\n    }\n    cout << \"\\n\";\n    return 0;\n}\n",
+      "c": "#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    int m, n;\n    if (scanf(\"%d %d\", &m, &n) != 2) return 0;\n    int *a = (int*)malloc(m * sizeof(int));\n    int *b = (int*)malloc(n * sizeof(int));\n    for (int i = 0; i < m; i++) scanf(\"%d\", &a[i]);\n    for (int i = 0; i < n; i++) scanf(\"%d\", &b[i]);\n    \n    int i = 0, j = 0, first = 1;\n    while (i < m && j < n) {\n        if (!first) printf(\" \");\n        if (a[i] <= b[j]) printf(\"%d\", a[i++]);\n        else printf(\"%d\", b[j++]);\n        first = 0;\n    }\n    while (i < m) {\n        if (!first) printf(\" \");\n        printf(\"%d\", a[i++]);\n        first = 0;\n    }\n    while (j < n) {\n        if (!first) printf(\" \");\n        printf(\"%d\", b[j++]);\n        first = 0;\n    }\n    printf(\"\\n\");\n    free(a);\n    free(b);\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": 15,
+    "title": "First Unique Character in a String",
+    "category": "Strings & Hashing",
+    "type": "coding",
+    "difficulty": "Easy",
+    "timeLimit": 600,
+    "unlockedLetter": "R",
+    "description": "Given a string `s`, find the first non-repeating character in it and print its 0-based index. If it does not exist, print `-1`.",
+    "inputFormat": "A single line containing string `s`.",
+    "outputFormat": "Print the index of the first unique character or `-1`.",
+    "constraints": "1 <= s.length <= 10^5\ns consists of only lowercase English letters.",
+    "sampleTestCases": [
+      {
+        "input": "leetcode",
+        "output": "0",
+        "explanation": "Character 'l' at index 0 does not repeat."
+      },
+      {
+        "input": "loveleetcode",
+        "output": "2",
+        "explanation": "Character 'v' at index 2 is the first unique."
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "aabb",
+        "output": "-1"
+      },
+      {
+        "input": "z",
+        "output": "0"
+      }
+    ],
+    "starterCode": {
+      "python": "import sys\nfrom collections import Counter\n\ndef first_unique_char():\n    s = sys.stdin.read().strip()\n    if not s:\n        print(-1)\n        return\n    count = Counter(s)\n    for i, c in enumerate(s):\n        if count[c] == 1:\n            print(i)\n            return\n    print(-1)\n\nif __name__ == '__main__':\n    first_unique_char()\n",
+      "java": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNext()) return;\n        String s = sc.next();\n        int[] freq = new int[26];\n        for (int i = 0; i < s.length(); i++) freq[s.charAt(i) - 'a']++;\n        for (int i = 0; i < s.length(); i++) {\n            if (freq[s.charAt(i) - 'a'] == 1) {\n                System.out.println(i);\n                return;\n            }\n        }\n        System.out.println(-1);\n    }\n}\n",
+      "cpp": "#include <iostream>\n#include <string>\n#include <vector>\n\nusing namespace std;\n\nint main() {\n    string s;\n    if (!(cin >> s)) return 0;\n    vector<int> freq(26, 0);\n    for (char c : s) freq[c - 'a']++;\n    for (int i = 0; i < (int)s.length(); i++) {\n        if (freq[s[i] - 'a'] == 1) {\n            cout << i << \"\\n\";\n            return 0;\n        }\n    }\n    cout << -1 << \"\\n\";\n    return 0;\n}\n",
+      "c": "#include <stdio.h>\n#include <string.h>\n\nint main() {\n    char s[100005];\n    if (scanf(\"%s\", s) != 1) return 0;\n    int freq[26] = {0};\n    for (int i = 0; s[i] != '\\0'; i++) freq[s[i] - 'a']++;\n    for (int i = 0; s[i] != '\\0'; i++) {\n        if (freq[s[i] - 'a'] == 1) {\n            printf(\"%d\\n\", i);\n            return 0;\n        }\n    }\n    printf(\"-1\\n\");\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": 16,
+    "title": "Search Insert Position",
+    "category": "Binary Search",
+    "type": "coding",
+    "difficulty": "Easy",
+    "timeLimit": 600,
+    "unlockedLetter": "S",
+    "description": "Given a sorted array of distinct integers and a target value, print the index if the target is found. If not, print the index where it would be if it were inserted in order.\n\nYou must write an algorithm with `O(log n)` runtime complexity.",
+    "inputFormat": "First line contains integer `N` and integer `target`.\nSecond line contains `N` space-separated integers.",
+    "outputFormat": "Print the index of target or its insert position.",
+    "constraints": "1 <= N <= 10^4\n-10^4 <= nums[i], target <= 10^4",
+    "sampleTestCases": [
+      {
+        "input": "4 5\n1 3 5 6",
+        "output": "2",
+        "explanation": "5 is found at index 2."
+      },
+      {
+        "input": "4 2\n1 3 5 6",
+        "output": "1",
+        "explanation": "2 is not found, would be inserted at index 1."
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "4 7\n1 3 5 6",
+        "output": "4"
+      },
+      {
+        "input": "4 0\n1 3 5 6",
+        "output": "0"
+      }
+    ],
+    "starterCode": {
+      "python": "import sys\n\ndef search_insert():\n    data = sys.stdin.read().split()\n    if not data:\n        return\n    n = int(data[0])\n    target = int(data[1])\n    nums = [int(x) for x in data[2:2+n]]\n    \n    left, right = 0, n - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if nums[mid] == target:\n            print(mid)\n            return\n        elif nums[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    print(left)\n\nif __name__ == '__main__':\n    search_insert()\n",
+      "java": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNextInt()) return;\n        int n = sc.nextInt();\n        int target = sc.nextInt();\n        int[] nums = new int[n];\n        for (int i = 0; i < n; i++) nums[i] = sc.nextInt();\n        \n        int left = 0, right = n - 1;\n        while (left <= right) {\n            int mid = left + (right - left) / 2;\n            if (nums[mid] == target) {\n                System.out.println(mid);\n                return;\n            } else if (nums[mid] < target) {\n                left = mid + 1;\n            } else {\n                right = mid - 1;\n            }\n        }\n        System.out.println(left);\n    }\n}\n",
+      "cpp": "#include <iostream>\n#include <vector>\n\nusing namespace std;\n\nint main() {\n    int n, target;\n    if (!(cin >> n >> target)) return 0;\n    vector<int> nums(n);\n    for (int i = 0; i < n; i++) cin >> nums[i];\n    \n    int left = 0, right = n - 1;\n    while (left <= right) {\n        int mid = left + (right - left) / 2;\n        if (nums[mid] == target) {\n            cout << mid << \"\\n\";\n            return 0;\n        } else if (nums[mid] < target) {\n            left = mid + 1;\n        } else {\n            right = mid - 1;\n        }\n    }\n    cout << left << \"\\n\";\n    return 0;\n}\n",
+      "c": "#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    int n, target;\n    if (scanf(\"%d %d\", &n, &target) != 2) return 0;\n    int *nums = (int*)malloc(n * sizeof(int));\n    for (int i = 0; i < n; i++) scanf(\"%d\", &nums[i]);\n    \n    int left = 0, right = n - 1;\n    while (left <= right) {\n        int mid = left + (right - left) / 2;\n        if (nums[mid] == target) {\n            printf(\"%d\\n\", mid);\n            free(nums);\n            return 0;\n        } else if (nums[mid] < target) {\n            left = mid + 1;\n        } else {\n            right = mid - 1;\n        }\n    }\n    printf(\"%d\\n\", left);\n    free(nums);\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": 17,
+    "title": "Intersection of Two Arrays",
+    "category": "Arrays & Sets",
+    "type": "coding",
+    "difficulty": "Easy",
+    "timeLimit": 600,
+    "unlockedLetter": "T",
+    "description": "Given two integer arrays `nums1` and `nums2`, print an array of their intersection. Each element in the result must be unique and elements must be printed in ascending order separated by a space.",
+    "inputFormat": "First line contains `N1` and `N2` (number of elements in nums1 and nums2).\nSecond line contains `N1` space-separated integers.\nThird line contains `N2` space-separated integers.",
+    "outputFormat": "Print the unique common elements in ascending order separated by a space.",
+    "constraints": "1 <= N1, N2 <= 1000\n0 <= nums1[i], nums2[i] <= 1000",
+    "sampleTestCases": [
+      {
+        "input": "4 2\n1 2 2 1\n2 2",
+        "output": "2",
+        "explanation": "Only 2 appears in both arrays."
+      },
+      {
+        "input": "5 3\n4 9 5 4 4\n9 4 9",
+        "output": "4 9",
+        "explanation": "Unique common elements in sorted order are 4 and 9."
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "3 3\n1 2 3\n4 5 6",
+        "output": ""
+      },
+      {
+        "input": "3 3\n3 2 1\n1 2 3",
+        "output": "1 2 3"
+      }
+    ],
+    "starterCode": {
+      "python": "import sys\n\ndef intersection():\n    data = sys.stdin.read().split()\n    if not data:\n        return\n    n1 = int(data[0])\n    n2 = int(data[1])\n    idx = 2\n    nums1 = set(int(x) for x in data[idx:idx+n1])\n    idx += n1\n    nums2 = set(int(x) for x in data[idx:idx+n2])\n    \n    res = sorted(list(nums1.intersection(nums2)))\n    print(\" \".join(map(str, res)))\n\nif __name__ == '__main__':\n    intersection()\n",
+      "java": "import java.util.*;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNextInt()) return;\n        int n1 = sc.nextInt();\n        int n2 = sc.nextInt();\n        HashSet<Integer> set1 = new HashSet<>();\n        for (int i = 0; i < n1; i++) set1.add(sc.nextInt());\n        TreeSet<Integer> common = new TreeSet<>();\n        for (int i = 0; i < n2; i++) {\n            int val = sc.nextInt();\n            if (set1.contains(val)) common.add(val);\n        }\n        StringBuilder sb = new StringBuilder();\n        for (int val : common) {\n            if (sb.length() > 0) sb.append(\" \");\n            sb.append(val);\n        }\n        System.out.println(sb.toString());\n    }\n}\n",
+      "cpp": "#include <iostream>\n#include <set>\n#include <vector>\n\nusing namespace std;\n\nint main() {\n    int n1, n2;\n    if (!(cin >> n1 >> n2)) return 0;\n    set<int> s1, common;\n    for (int i = 0; i < n1; i++) { int x; cin >> x; s1.insert(x); }\n    for (int i = 0; i < n2; i++) {\n        int x; cin >> x;\n        if (s1.count(x)) common.insert(x);\n    }\n    bool first = true;\n    for (int x : common) {\n        if (!first) cout << \" \";\n        cout << x;\n        first = false;\n    }\n    cout << \"\\n\";\n    return 0;\n}\n",
+      "c": "#include <stdio.h>\n#include <stdlib.h>\n\nint main() {\n    int n1, n2;\n    if (scanf(\"%d %d\", &n1, &n2) != 2) return 0;\n    int has1[1001] = {0};\n    int has2[1001] = {0};\n    for (int i = 0; i < n1; i++) { int x; scanf(\"%d\", &x); if(x>=0&&x<=1000) has1[x] = 1; }\n    for (int i = 0; i < n2; i++) { int x; scanf(\"%d\", &x); if(x>=0&&x<=1000) has2[x] = 1; }\n    int first = 1;\n    for (int i = 0; i <= 1000; i++) {\n        if (has1[i] && has2[i]) {\n            if (!first) printf(\" \");\n            printf(\"%d\", i);\n            first = 0;\n        }\n    }\n    printf(\"\\n\");\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": 18,
+    "title": "Aptitude: Clock Hands Angle",
+    "category": "Aptitude & Logic",
+    "type": "coding",
+    "difficulty": "Medium",
+    "timeLimit": 600,
+    "unlockedLetter": "W",
+    "description": "Given two integers `hours` (1 to 12) and `minutes` (0 to 59), calculate the smaller angle (in degrees, rounded to the nearest integer) formed between the hour hand and the minute hand of a traditional 12-hour clock.\n\nExample formula:\n- Hour hand moves 0.5 degrees per minute and 30 degrees per hour.\n- Minute hand moves 6 degrees per minute.\n- Calculate absolute difference and print `min(diff, 360 - diff)` rounded to the nearest integer.",
+    "inputFormat": "A single line containing `hours` and `minutes` separated by a space.",
+    "outputFormat": "Print the smaller angle in degrees (integer).",
+    "constraints": "1 <= hours <= 12\n0 <= minutes <= 59",
+    "sampleTestCases": [
+      {
+        "input": "3 30",
+        "output": "75",
+        "explanation": "At 3:30, angle between hands is 75 degrees."
+      },
+      {
+        "input": "12 30",
+        "output": "165",
+        "explanation": "At 12:30, angle between hands is 165 degrees."
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "3 15",
+        "output": "8"
+      },
+      {
+        "input": "12 0",
+        "output": "0"
+      }
+    ],
+    "starterCode": {
+      "python": "import sys\n\ndef clock_angle():\n    data = sys.stdin.read().split()\n    if not data:\n        return\n    h = int(data[0]) % 12\n    m = int(data[1])\n    \n    h_angle = h * 30 + m * 0.5\n    m_angle = m * 6.0\n    diff = abs(h_angle - m_angle)\n    smaller = min(diff, 360.0 - diff)\n    print(round(smaller))\n\nif __name__ == '__main__':\n    clock_angle()\n",
+      "java": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNextInt()) return;\n        int h = sc.nextInt() % 12;\n        int m = sc.nextInt();\n        double hAngle = h * 30.0 + m * 0.5;\n        double mAngle = m * 6.0;\n        double diff = Math.abs(hAngle - mAngle);\n        double angle = Math.min(diff, 360.0 - diff);\n        System.out.println(Math.round(angle));\n    }\n}\n",
+      "cpp": "#include <iostream>\n#include <cmath>\n\nusing namespace std;\n\nint main() {\n    int h, m;\n    if (!(cin >> h >> m)) return 0;\n    h = h % 12;\n    double h_angle = h * 30.0 + m * 0.5;\n    double m_angle = m * 6.0;\n    double diff = fabs(h_angle - m_angle);\n    double angle = min(diff, 360.0 - diff);\n    cout << (int)round(angle) << \"\\n\";\n    return 0;\n}\n",
+      "c": "#include <stdio.h>\n#include <math.h>\n\nint main() {\n    int h, m;\n    if (scanf(\"%d %d\", &h, &m) != 2) return 0;\n    h = h % 12;\n    double h_angle = h * 30.0 + m * 0.5;\n    double m_angle = m * 6.0;\n    double diff = fabs(h_angle - m_angle);\n    double angle = (diff < 360.0 - diff) ? diff : (360.0 - diff);\n    printf(\"%d\\n\", (int)round(angle));\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": 19,
+    "title": "Aptitude: Train Crossing Speed & Distance",
+    "category": "Aptitude & Math",
+    "type": "coding",
+    "difficulty": "Easy",
+    "timeLimit": 600,
+    "unlockedLetter": "I",
+    "description": "A train running at a speed of `S` km/hr crosses a stationary pole in `T` seconds.\n\nWhat is the length of the train in meters? (Round to the nearest integer).\n\nFormula:\n`Speed in m/s = S * (5 / 18)`\n`Length in meters = Speed * T`",
+    "inputFormat": "Two integers `S` (speed in km/h) and `T` (time in seconds) separated by space.",
+    "outputFormat": "Print the length of the train in meters as an integer.",
+    "constraints": "1 <= S <= 300\n1 <= T <= 300",
+    "sampleTestCases": [
+      {
+        "input": "60 9",
+        "output": "150",
+        "explanation": "60 * (5/18) * 9 = 150 meters."
+      },
+      {
+        "input": "72 10",
+        "output": "200",
+        "explanation": "72 * (5/18) * 10 = 200 meters."
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "36 15",
+        "output": "150"
+      },
+      {
+        "input": "108 5",
+        "output": "150"
+      }
+    ],
+    "starterCode": {
+      "python": "import sys\n\ndef train_length():\n    data = sys.stdin.read().split()\n    if not data:\n        return\n    s = float(data[0])\n    t = float(data[1])\n    length = s * (5.0 / 18.0) * t\n    print(round(length))\n\nif __name__ == '__main__':\n    train_length()\n",
+      "java": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNextDouble()) return;\n        double s = sc.nextDouble();\n        double t = sc.nextDouble();\n        double length = s * (5.0 / 18.0) * t;\n        System.out.println(Math.round(length));\n    }\n}\n",
+      "cpp": "#include <iostream>\n#include <cmath>\n\nusing namespace std;\n\nint main() {\n    double s, t;\n    if (!(cin >> s >> t)) return 0;\n    double length = s * (5.0 / 18.0) * t;\n    cout << (long long)round(length) << \"\\n\";\n    return 0;\n}\n",
+      "c": "#include <stdio.h>\n#include <math.h>\n\nint main() {\n    double s, t;\n    if (scanf(\"%lf %lf\", &s, &t) != 2) return 0;\n    double length = s * (5.0 / 18.0) * t;\n    printf(\"%lld\\n\", (long long)round(length));\n    return 0;\n}\n"
+    }
+  },
+  {
+    "id": 20,
+    "title": "Aptitude: Work and Time Efficiency",
+    "category": "Aptitude & Logic",
+    "type": "coding",
+    "difficulty": "Medium",
+    "timeLimit": 600,
+    "unlockedLetter": "N",
+    "description": "Person A can finish a work in `A` days, and Person B can finish the same work in `B` days.\n\nWorking together, how many days will it take them to complete the work? Print the result rounded to two decimal places (e.g. `2.40`).\n\nFormula:\n`Together = (A * B) / (A + B)`",
+    "inputFormat": "Two positive integers `A` and `B` separated by space.",
+    "outputFormat": "Print the number of days formatted to 2 decimal places.",
+    "constraints": "1 <= A, B <= 1000",
+    "sampleTestCases": [
+      {
+        "input": "6 4",
+        "output": "2.40",
+        "explanation": "(6 * 4) / (6 + 4) = 24 / 10 = 2.40 days."
+      },
+      {
+        "input": "10 15",
+        "output": "6.00",
+        "explanation": "(10 * 15) / (10 + 15) = 150 / 25 = 6.00 days."
+      }
+    ],
+    "hiddenTestCases": [
+      {
+        "input": "5 5",
+        "output": "2.50"
+      },
+      {
+        "input": "20 30",
+        "output": "12.00"
+      }
+    ],
+    "starterCode": {
+      "python": "import sys\n\ndef work_time():\n    data = sys.stdin.read().split()\n    if not data:\n        return\n    a = float(data[0])\n    b = float(data[1])\n    days = (a * b) / (a + b)\n    print(f\"{days:.2f}\")\n\nif __name__ == '__main__':\n    work_time()\n",
+      "java": "import java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner sc = new Scanner(System.in);\n        if (!sc.hasNextDouble()) return;\n        double a = sc.nextDouble();\n        double b = sc.nextDouble();\n        double days = (a * b) / (a + b);\n        System.out.printf(java.util.Locale.US, \"%.2f\\n\", days);\n    }\n}\n",
+      "cpp": "#include <iostream>\n#include <iomanip>\n\nusing namespace std;\n\nint main() {\n    double a, b;\n    if (!(cin >> a >> b)) return 0;\n    double days = (a * b) / (a + b);\n    cout << fixed << setprecision(2) << days << \"\\n\";\n    return 0;\n}\n",
+      "c": "#include <stdio.h>\n\nint main() {\n    double a, b;\n    if (scanf(\"%lf %lf\", &a, &b) != 2) return 0;\n    double days = (a * b) / (a + b);\n    printf(\"%.2f\\n\", days);\n    return 0;\n}\n"
+    }
+  }
+]

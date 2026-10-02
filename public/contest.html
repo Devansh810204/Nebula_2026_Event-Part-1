@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nebula 2026 | Contest Arena</title>
+  <link rel="icon" type="image/png" href="/assets/nebula-logo.png">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/contest.css">
+</head>
+<body>
+  <!-- Fullscreen Contest Layout -->
+  <div class="contest-layout">
+    
+    <!-- TOP NAVIGATION BAR -->
+    <header class="contest-header">
+      <div class="header-left">
+        <div class="header-logo-group">
+          <img src="/assets/nebula-logo.png" alt="Nebula" class="header-logo">
+          <span class="header-title-text">NEBULA 2026</span>
+        </div>
+        <button id="btn-toggle-drawer" class="btn-progress-toggle" title="View unlocked letters and solved questions">
+          <span>📋 Progress & Letters</span>
+        </button>
+      </div>
+
+      <div class="header-center">
+        <!-- Question Indicator -->
+        <span id="q-current-number" style="font-weight: 700; font-size: 0.95rem; color: #475569;">Question 1 of 20</span>
+
+        <!-- 10-Minute Question Timer -->
+        <div id="timer-box" class="timer-container" title="Time remaining for current question">
+          <span class="timer-icon">⏰</span>
+          <span id="timer-display">10:00</span>
+        </div>
+
+        <!-- Mystery Letters Counter -->
+        <div class="letter-counter-pill" title="Collect 8 letters to win!">
+          <span class="letter-counter-icon">🔑</span>
+          <span>Letters: <strong id="header-letters-count">0 / 8</strong></span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div id="fullscreen-status-badge" class="fullscreen-badge">
+          <span>🟢 Fullscreen Active</span>
+        </div>
+        <div id="team-name-display" class="team-info-badge">
+          Team
+        </div>
+      </div>
+    </header>
+
+    <!-- LEFT COLLAPSIBLE PROGRESS DRAWER -->
+    <aside id="progress-drawer" class="progress-drawer">
+      <div class="drawer-header">
+        <span class="drawer-title">Team Progress & Roadmap</span>
+        <button id="btn-close-drawer" class="drawer-close-btn">&times;</button>
+      </div>
+      <div class="drawer-body">
+        <!-- 8 Mystery Letter Slots -->
+        <div class="letters-section">
+          <div class="letters-section-title">
+            <span>Mystery Characters</span>
+            <span style="color: #0b4ea2; font-size: 0.8rem;">Goal: 8 Letters</span>
+          </div>
+          <div id="letter-slots-container" class="letter-slots-grid">
+            <!-- 8 Slots dynamically rendered -->
+          </div>
+        </div>
+
+        <!-- Question Sequence Roadmap -->
+        <div class="sequence-section-title">Questions Roadmap</div>
+        <div id="sequence-list-container" class="sequence-list">
+          <!-- Dynamic sequence of questions -->
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN SPLIT WORKSPACE -->
+    <main class="contest-main">
+      <!-- Left Half: Question Description Panel -->
+      <section id="panel-question" class="panel-question">
+        <div class="question-meta-bar">
+          <span id="q-badge-category" class="badge-tag badge-category">Category</span>
+          <span id="q-badge-difficulty" class="badge-tag badge-easy">Difficulty</span>
+          <span class="badge-tag badge-time">10 Mins per question</span>
+        </div>
+
+        <h2 id="q-title" class="question-title">Loading Question...</h2>
+
+        <div id="q-description" class="question-body">
+          Please wait while question details are loaded...
+        </div>
+
+        <!-- Aptitude Question Options (If question is aptitude type) -->
+        <div id="aptitude-options-container" class="aptitude-container" style="display: none;">
+          <!-- Options rendered dynamically -->
+        </div>
+
+        <div class="section-label">Input Format</div>
+        <div id="q-input-format" class="code-box"></div>
+
+        <div class="section-label">Output Format</div>
+        <div id="q-output-format" class="code-box"></div>
+
+        <div class="section-label">Constraints</div>
+        <div id="q-constraints" class="code-box"></div>
+
+        <div class="section-label">Sample Test Cases</div>
+        <div id="q-sample-cases"></div>
+      </section>
+
+      <!-- Right Half: Coding & Compiler Panel -->
+      <section class="panel-editor">
+        <div class="editor-toolbar">
+          <div class="lang-select-group">
+            <label for="select-language" style="font-size: 0.85rem; font-weight: 700; color: #475569;">Language:</label>
+            <select id="select-language" class="select-lang">
+              <option value="python">Python 3 (3.10)</option>
+              <option value="java">Java (OpenJDK 15)</option>
+              <option value="cpp">C++ (GCC 10)</option>
+              <option value="c">C (GCC 10)</option>
+            </select>
+          </div>
+          <button id="btn-reset-code" class="btn-reset-code" title="Reset starter template">↺ Reset Code</button>
+        </div>
+
+        <!-- Editor Container -->
+        <div id="code-editor-wrapper" class="editor-container">
+          <textarea id="code-editor-area" class="editor-textarea" spellcheck="false" placeholder="# Write your code here..."></textarea>
+        </div>
+
+        <!-- Editor Action Buttons -->
+        <div class="editor-actions-bar">
+          <div class="actions-left">
+            <button id="btn-run-code" class="btn-secondary btn-run">▶ Run Sample Test</button>
+            <button id="btn-skip-question" class="btn-secondary" title="Skip to next question">➔ Skip</button>
+          </div>
+          <div class="actions-right">
+            <button id="btn-submit-code" class="btn-submit">Submit Solution ➔</button>
+          </div>
+        </div>
+
+        <!-- Console / Terminal Output Pane -->
+        <div class="console-pane">
+          <div class="console-header">
+            <span>Terminal / Execution Output</span>
+            <span style="font-size: 0.75rem; color: #94a3b8;">Standard I/O</span>
+          </div>
+          <div id="console-body" class="console-body">Click "Run Sample Test" or "Submit Solution" to view output.</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- START BRIEFING FULLSCREEN GATE MODAL -->
+  <div id="start-briefing-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 580px; text-align: left;">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <img src="/assets/nebula-logo.png" alt="Nebula" style="width: 80px; height: auto;">
+        <h2 style="font-size: 1.5rem; font-weight: 800; color: #0b4ea2; margin-top: 8px;">Nebula 2026 Coding Challenge</h2>
+        <p style="color: #64748b; font-size: 0.9rem;">Official Competition Rules & Secure Environment</p>
+      </div>
+
+      <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 18px; margin-bottom: 20px; font-size: 0.9rem; line-height: 1.6; color: #334155;">
+        <p><strong>🎯 Objective:</strong> Solve questions correctly to collect <strong>8 Mystery Letters</strong>. As soon as your team unlocks all 8 characters, your challenge is complete!</p>
+        <p style="margin-top: 8px;"><strong>⏱️ Time Limit:</strong> <strong>10 minutes</strong> per question. When the clock hits 00:00, you will automatically advance to the next question.</p>
+        <p style="margin-top: 8px;"><strong>🛡️ Fair Play & Proctoring Enforcement:</strong></p>
+        <ul style="margin-left: 20px; margin-top: 4px;">
+          <li>You <strong>MUST close all other browser tabs and applications</strong> before proceeding.</li>
+          <li>The test will operate in <strong>Mandatory Full-Screen Mode</strong>.</li>
+          <li><strong>Attempt 1:</strong> Exiting full-screen or switching tabs will freeze your screen with a strict warning.</li>
+          <li><strong>Attempt 2:</strong> A second violation will lead to <strong>IMMEDIATE DISQUALIFICATION</strong> and report to the admin portal.</li>
+          <li>Copying question text is strictly disabled.</li>
+        </ul>
+      </div>
+
+      <button id="btn-enter-fullscreen-start" class="btn-primary" style="padding: 14px; font-size: 1.05rem;">
+        <span>🚀 Enter Full-Screen & Begin Challenge</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ANTI-CHEAT STRIKE 1 FREEZE MODAL -->
+  <div id="proctor-warning-modal" class="warning-freeze-overlay" style="display: none;">
+    <div class="warning-card">
+      <div class="warning-icon">⚠️</div>
+      <h2 class="warning-title">SECURITY WARNING (Strike 1 of 2)</h2>
+      <p class="warning-text">
+        <strong>Fullscreen exit or tab switch detected!</strong><br><br>
+        This competition is strictly proctored. You cannot interact with your code or question while this warning is displayed.<br><br>
+        Please ensure all other browser tabs and external apps are closed. Any further attempt to exit full-screen will result in <strong>IMMEDIATE PERMANENT DISQUALIFICATION</strong>.
+      </p>
+      <button id="btn-resume-fullscreen" class="btn-resume-fullscreen">
+        I Understand — Re-enter Full-Screen
+      </button>
+    </div>
+  </div>
+
+  <!-- DISQUALIFIED MODAL -->
+  <div id="proctor-disqualified-modal" class="modal-overlay" style="display: none; z-index: 99999999;">
+    <div class="modal-content" style="border: 3px solid #ef4444;">
+      <div style="font-size: 3.5rem; margin-bottom: 12px;">🚨</div>
+      <h2 style="font-size: 1.6rem; font-weight: 900; color: #b91c1c; margin-bottom: 12px;">TEAM DISQUALIFIED</h2>
+      <p id="disqualified-reason-text" style="color: #475569; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.6;">
+        Multiple full-screen or tab switch violations detected. You have been disqualified from Nebula 2026.
+      </p>
+      <p style="font-size: 0.85rem; color: #94a3b8;">Redirecting to login portal in 5 seconds...</p>
+    </div>
+  </div>
+
+  <!-- LETTER UNLOCKED POPUP MODAL -->
+  <div id="letter-unlocked-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-unlocked-letter">
+      <div class="letter-avatar-huge" id="unlocked-letter-display">N</div>
+      <h2 class="modal-unlocked-title">🎉 LETTER UNLOCKED!</h2>
+      <p id="unlocked-count-text" class="modal-unlocked-sub">You have collected 1 out of 8 characters!</p>
+      <button id="btn-proceed-next-q" class="btn-primary" style="padding: 12px;">
+        <span>Proceed to Next Question ➔</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ALL 8 CHARACTERS UNLOCKED GRAND VICTORY MODAL -->
+  <div id="grand-victory-modal" class="modal-overlay" style="display: none; z-index: 99999999;">
+    <div class="modal-content" style="max-width: 580px; border: 3px solid #0066f5; padding: 40px 30px;">
+      <div style="font-size: 4rem; margin-bottom: 10px;">🏆</div>
+      <h1 style="font-size: 1.8rem; font-weight: 900; color: #0b4ea2; margin-bottom: 8px;">ALL 8 CHARACTERS UNLOCKED!</h1>
+      <p style="color: #475569; font-size: 1rem; margin-bottom: 24px;">
+        Extraordinary work! Your team has successfully solved 8 questions and unlocked all 8 mystery characters!
+      </p>
+
+      <!-- Row of Unlocked Characters -->
+      <div id="victory-letters-row" style="display: flex; justify-content: center; gap: 8px; margin-bottom: 28px;">
+        <!-- Filled dynamically -->
+      </div>
+
+      <div style="background: #f1f5f9; padding: 14px; border-radius: 8px; margin-bottom: 20px; font-weight: 600; color: #0b4ea2;">
+        Your submission is officially completed and recorded.
+      </div>
+
+      <p style="font-size: 0.9rem; color: #64748b;">
+        Logging out and finalizing session in <strong id="victory-logout-countdown" style="color: #0b4ea2; font-size: 1.1rem;">5</strong> seconds...
+      </p>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/watermark.js"></script>
+  <script src="/js/contest.js"></script>
+</body>
+</html>

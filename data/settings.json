@@ -1,0 +1,7 @@
+{
+  "eventName": "Nebula 2026 Coding Challenge",
+  "timeLimitPerQuestion": 600,
+  "maxLettersNeeded": 8,
+  "proctorStrictLevel": "strict",
+  "autoAdvanceOnTimeout": true
+}

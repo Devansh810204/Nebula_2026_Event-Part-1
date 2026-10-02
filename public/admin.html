@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nebula 2026 | Admin Command Center</title>
+  <link rel="icon" type="image/png" href="/assets/nebula-logo.png">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <!-- Navbar -->
+    <header class="admin-navbar">
+      <div class="admin-nav-left">
+        <img src="/assets/nebula-logo.png" alt="Nebula" class="admin-logo">
+        <span class="admin-title-badge">NEBULA 2026</span>
+        <span class="admin-badge-tag">Admin Command Center</span>
+      </div>
+      <div class="admin-nav-right">
+        <button id="btn-admin-logout" class="btn-secondary" style="padding: 7px 16px;">Logout</button>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="admin-container">
+      
+      <!-- STATS GRID -->
+      <section class="stats-grid">
+        <div class="stat-card">
+          <div>
+            <div class="stat-info-label">Total Teams</div>
+            <div id="stat-total-teams" class="stat-info-val">80</div>
+          </div>
+          <div class="stat-icon">👥</div>
+        </div>
+
+        <div class="stat-card stat-active">
+          <div>
+            <div class="stat-info-label">Active Teams</div>
+            <div id="stat-active-teams" class="stat-info-val">0</div>
+          </div>
+          <div class="stat-icon" style="color: #10b981;">⚡</div>
+        </div>
+
+        <div class="stat-card stat-completed">
+          <div>
+            <div class="stat-info-label">Completed (8 Letters)</div>
+            <div id="stat-completed-teams" class="stat-info-val">0</div>
+          </div>
+          <div class="stat-icon" style="color: #8b5cf6;">🏆</div>
+        </div>
+
+        <div class="stat-card stat-disqualified">
+          <div>
+            <div class="stat-info-label">Disqualified</div>
+            <div id="stat-disqualified-teams" class="stat-info-val">0</div>
+          </div>
+          <div class="stat-icon" style="color: #ef4444;">🚨</div>
+        </div>
+
+        <div class="stat-card">
+          <div>
+            <div class="stat-info-label">Questions</div>
+            <div id="stat-total-questions" class="stat-info-val">20</div>
+          </div>
+          <div class="stat-icon">📚</div>
+        </div>
+      </section>
+
+      <!-- NAVIGATION TABS -->
+      <div class="admin-tabs-nav">
+        <button class="admin-tab-btn active" data-tab="leaderboard">
+          <span>📊 Live Leaderboard</span>
+        </button>
+        <button class="admin-tab-btn" data-tab="teams">
+          <span>👥 Team Management (80 Teams)</span>
+        </button>
+        <button class="admin-tab-btn" data-tab="questions">
+          <span>❓ Question Management (20 Questions)</span>
+        </button>
+        <button class="admin-tab-btn" data-tab="alerts">
+          <span>🚨 Live Proctor Alerts</span>
+        </button>
+      </div>
+
+      <!-- TAB 1: LIVE LEADERBOARD -->
+      <div id="tab-content-leaderboard" class="admin-tab-content">
+        <div class="card-table-wrapper">
+          <div class="table-toolbar">
+            <h3 style="font-size: 1.1rem; font-weight: 800; color: #0b4ea2;">Real-Time Competition Leaderboard</h3>
+            <span style="font-size: 0.85rem; color: #64748b;">Ranked by Letters Unlocked (Max 8), Solved Count, and Speed</span>
+          </div>
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th style="width: 80px;">Rank</th>
+                <th>Team</th>
+                <th>Status</th>
+                <th>Characters Unlocked</th>
+                <th>Solved</th>
+                <th>Proctor Strikes</th>
+                <th>Completion Time</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-tbody">
+              <!-- Rendered via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 2: TEAMS MANAGEMENT -->
+      <div id="tab-content-teams" class="admin-tab-content" style="display: none;">
+        <div class="card-table-wrapper">
+          <div class="table-toolbar">
+            <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+              <input type="text" id="teams-search-input" class="table-search-input" placeholder="🔍 Search team ID or name...">
+              <select id="teams-status-filter" class="select-lang" style="padding: 9px 12px;">
+                <option value="all">All Statuses</option>
+                <option value="ready">Ready (Not Started)</option>
+                <option value="in_progress">In Progress</option>
+                <option value="completed">Completed</option>
+                <option value="disqualified">Disqualified</option>
+              </select>
+              <span id="teams-count-display" style="font-size: 0.85rem; color: #64748b; font-weight: 600;"></span>
+            </div>
+
+            <div class="table-actions">
+              <button id="btn-export-csv" class="btn-secondary" title="Download all team credentials as CSV">📥 Export CSV</button>
+              <button id="btn-add-team" class="btn-primary" style="padding: 8px 16px; font-size: 0.88rem; width: auto;">+ Add Team</button>
+              <button id="btn-reset-teams" class="btn-secondary" style="color: #b91c1c; border-color: #fca5a5;" title="Re-seed 80 teams">↺ Reset 80 Teams</button>
+            </div>
+          </div>
+
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Team ID</th>
+                <th>Team Name</th>
+                <th>Password</th>
+                <th>Status</th>
+                <th>Letters Unlocked</th>
+                <th>Strikes</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="teams-tbody">
+              <!-- Rendered via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 3: QUESTIONS MANAGEMENT -->
+      <div id="tab-content-questions" class="admin-tab-content" style="display: none;">
+        <div class="card-table-wrapper">
+          <div class="table-toolbar">
+            <div>
+              <h3 style="font-size: 1.1rem; font-weight: 800; color: #0b4ea2;">Event Questions & Mystery Characters</h3>
+              <p style="font-size: 0.82rem; color: #64748b;">Manage questions, time limit (default 10 min), and character unlock mappings</p>
+            </div>
+            <div>
+              <button id="btn-add-question" class="btn-primary" style="padding: 8px 16px; font-size: 0.88rem; width: auto;" onclick="openAddQuestionModal()">+ Add Question</button>
+            </div>
+          </div>
+
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th style="width: 70px;">ID</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Difficulty</th>
+                <th>Time Limit</th>
+                <th>Mystery Letter</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="questions-tbody">
+              <!-- Rendered via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB 4: LIVE PROCTOR ALERTS FEED -->
+      <div id="tab-content-alerts" class="admin-tab-content" style="display: none;">
+        <div class="card-table-wrapper" style="padding: 24px;">
+          <h3 style="font-size: 1.1rem; font-weight: 800; color: #0b4ea2; margin-bottom: 16px;">
+            Live Proctor & Integrity Event Stream
+          </h3>
+          <div id="alerts-feed-list" class="alerts-feed-container">
+            <div class="alert-feed-item feed-warning">
+              <div>System ready: Monitoring all team full-screen activity and tab visibility in real-time.</div>
+              <div style="font-size: 0.78rem; color: #64748b;">Ready</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ADD TEAM MODAL -->
+  <div id="add-team-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content" style="text-align: left; max-width: 440px;">
+      <h3 style="font-size: 1.25rem; font-weight: 800; color: #0b4ea2; margin-bottom: 16px;">Add New Team</h3>
+      <form id="form-add-team">
+        <div class="form-group">
+          <label class="form-label">Team ID (unique)</label>
+          <input type="text" id="new-team-id" class="form-input" placeholder="team81" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Team Name</label>
+          <input type="text" id="new-team-name" class="form-input" placeholder="Nebula Vanguard 81" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="text" id="new-team-password" class="form-input" placeholder="nebula@81" required>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button type="submit" class="btn-primary" style="flex: 1;">Create Team</button>
+          <button type="button" class="btn-secondary btn-modal-close" style="flex: 1;">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- EDIT TEAM MODAL -->
+  <div id="edit-team-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content" style="text-align: left; max-width: 440px;">
+      <h3 style="font-size: 1.25rem; font-weight: 800; color: #0b4ea2; margin-bottom: 16px;">Edit Team</h3>
+      <form id="form-edit-team">
+        <input type="hidden" id="edit-team-id">
+        <div class="form-group">
+          <label class="form-label">Team Name</label>
+          <input type="text" id="edit-team-name" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="text" id="edit-team-password" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select id="edit-team-status" class="select-lang" style="width: 100%; padding: 10px;">
+            <option value="ready">ready</option>
+            <option value="in_progress">in_progress</option>
+            <option value="completed">completed</option>
+            <option value="disqualified">disqualified</option>
+          </select>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button type="submit" class="btn-primary" style="flex: 1;">Save Changes</button>
+          <button type="button" class="btn-secondary btn-modal-close" style="flex: 1;">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADD / EDIT QUESTION MODAL -->
+  <div id="question-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content" style="text-align: left; max-width: 640px; max-height: 90vh; overflow-y: auto;">
+      <h3 id="question-modal-title" style="font-size: 1.25rem; font-weight: 800; color: #0b4ea2; margin-bottom: 16px;">Add / Edit Question</h3>
+      <form id="form-question">
+        <input type="hidden" id="form-q-id">
+        <div class="form-group">
+          <label class="form-label">Question Title</label>
+          <input type="text" id="form-q-title" class="form-input" required>
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label">Category</label>
+            <input type="text" id="form-q-category" class="form-input" value="Arrays & Hashing" required>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label">Difficulty</label>
+            <select id="form-q-difficulty" class="select-lang" style="width: 100%; padding: 10px;">
+              <option value="Easy">Easy</option>
+              <option value="Medium">Medium</option>
+              <option value="Hard">Hard</option>
+            </select>
+          </div>
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label">Time Limit (Minutes)</label>
+            <input type="number" id="form-q-timelimit" class="form-input" value="10" min="1" max="60" required>
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label class="form-label">Mystery Character to Unlock</label>
+            <input type="text" id="form-q-letter" class="form-input" maxlength="2" value="N" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Problem Description</label>
+          <textarea id="form-q-description" class="form-input" rows="5" required></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Input Format</label>
+          <textarea id="form-q-inputformat" class="form-input" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Output Format</label>
+          <textarea id="form-q-outputformat" class="form-input" rows="2"></textarea>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button type="submit" class="btn-primary" style="flex: 1;">Save Question</button>
+          <button type="button" class="btn-secondary btn-modal-close" style="flex: 1;">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/watermark.js"></script>
+  <script src="/js/admin.js"></script>
+  <script>
+    function openAddQuestionModal() {
+      document.getElementById('form-q-id').value = '';
+      document.getElementById('form-q-title').value = '';
+      document.getElementById('form-q-category').value = 'Arrays';
+      document.getElementById('form-q-difficulty').value = 'Easy';
+      document.getElementById('form-q-timelimit').value = '10';
+      document.getElementById('form-q-letter').value = 'X';
+      document.getElementById('form-q-description').value = '';
+      document.getElementById('form-q-inputformat').value = '';
+      document.getElementById('form-q-outputformat').value = '';
+      document.getElementById('question-modal-title').textContent = 'Add New Question';
+      document.getElementById('question-modal').style.display = 'flex';
+    }
+  </script>
+</body>
+</html>

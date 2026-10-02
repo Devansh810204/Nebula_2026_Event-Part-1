@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nebula 2026 | Coding Challenge Login</title>
+  <link rel="icon" type="image/png" href="/assets/nebula-logo.png">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <!-- Watermark Container is dynamically injected by watermark.js -->
+
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <img src="/assets/nebula-logo.png" alt="Nebula Logo" class="auth-logo">
+        <h1 class="auth-title">NEBULA 2026</h1>
+        <p class="auth-subtitle">Inter-Collegiate Coding & DSA Challenge</p>
+      </div>
+
+      <!-- Tab Switcher -->
+      <div class="auth-tabs">
+        <button id="tab-student" class="auth-tab-btn active">Student (Team) Login</button>
+        <button id="tab-admin" class="auth-tab-btn">Admin Portal</button>
+      </div>
+
+      <!-- Dynamic Alert Box -->
+      <div id="alert-box" class="alert-box"></div>
+
+      <!-- Student Login Form -->
+      <form id="student-form">
+        <div class="form-group">
+          <label class="form-label" for="student-team-id">Team ID</label>
+          <input type="text" id="student-team-id" class="form-input" placeholder="e.g. team01, team12" required autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="student-password">Team Password</label>
+          <input type="password" id="student-password" class="form-input" placeholder="Enter assigned team password" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn-primary">
+          <span>Enter Contest Arena</span>
+          <span>➔</span>
+        </button>
+      </form>
+
+      <!-- Admin Login Form (Hidden by default) -->
+      <form id="admin-form" style="display: none;">
+        <div class="form-group">
+          <label class="form-label" for="admin-username">Admin Username</label>
+          <input type="text" id="admin-username" class="form-input" placeholder="admin" required autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="admin-password">Admin Password</label>
+          <input type="password" id="admin-password" class="form-input" placeholder="Enter master password" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn-primary" style="background: #0284c7;">
+          <span>Access Command Center</span>
+          <span>➔</span>
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        <p>Proctored Environment • Fair Play Strictly Monitored</p>
+        <p style="margin-top: 4px; font-size: 0.75rem; color: #94a3b8;">Default Student Demo: <code>team01</code> / <code>nebula@01</code> | Admin: <code>admin</code> / <code>adminnebula2026</code></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/watermark.js"></script>
+  <script src="/js/login.js"></script>
+</body>
+</html>

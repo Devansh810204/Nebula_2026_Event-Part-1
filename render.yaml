@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: nebula-2026-coding-challenge
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: ADMIN_USER
+        value: admin
+      - key: ADMIN_PASS
+        value: adminnebula2026
+      - key: JWT_SECRET
+        generateValue: true
